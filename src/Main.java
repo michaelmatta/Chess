@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Main extends JPanel {
     public static final int FRAMEWIDTH = 1000, FRAMEHEIGHT = 1000;
@@ -7,6 +8,14 @@ public class Main extends JPanel {
 
     public Main(){
 
+        int[][] grid = new int[8][8];
+
+        ArrayList<Piece> pieces = new ArrayList<>();
+
+        //initialize pieces
+        //add pieces to arraylist
+
+        //BEGIN GAME!!
     }
 
     public void PaintComponent(Graphics g){
