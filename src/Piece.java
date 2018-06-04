@@ -1,4 +1,7 @@
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 
 public class Piece {
@@ -50,7 +53,12 @@ public class Piece {
     }
 
     public void draw(Graphics2D g2) {
-        //draw image
+        try {
+            BufferedImage pic = ImageIO.read(new File("res/" + id + ".png"));
+            g2.drawImage(pic, x, y, 100, 100, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
