@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class Main extends JPanel {
@@ -12,6 +14,34 @@ public class Main extends JPanel {
 
         ArrayList<Piece> pieces = new ArrayList<>();
 
+        addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+
+
         //initialize pieces
         //add pieces to arraylist
 
@@ -23,6 +53,8 @@ public class Main extends JPanel {
         Graphics2D g2 = (Graphics2D)g;
 
     }
+
+
 
     //sets ups the panel and frame.
     public static void main(String[] args) {
