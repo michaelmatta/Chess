@@ -54,7 +54,22 @@ public class Main extends JPanel {
             pieces.add(new Piece(i, 6, "PawnWhite", true));
             pieces.add(new Piece(i, 1, "PawnBlack", false));
         }
-        //pieces.add(new Piece())
+        pieces.add(new Piece(0, 7, "RookWhite", true));
+        pieces.add(new Piece(7, 7, "RookWhite", true));
+        pieces.add(new Piece(0, 0, "RookBlack", false));
+        pieces.add(new Piece(7, 0, "RookBlack", false));
+        pieces.add(new Piece(1, 7, "KnightWhite", true));
+        pieces.add(new Piece(6, 7, "KnightWhite", true));
+        pieces.add(new Piece(1, 0, "KnightBlack", false));
+        pieces.add(new Piece(6, 0, "KnightBlack", false));
+        pieces.add(new Piece(2, 7, "BishopWhite", true));
+        pieces.add(new Piece(5, 7, "BishopWhite", true));
+        pieces.add(new Piece(2, 0, "BishopBlack", false));
+        pieces.add(new Piece(5, 0, "BishopBlack", false));
+        pieces.add(new Piece(4, 7, "KingWhite", true));
+        pieces.add(new Piece(3, 7, "QueenWhite", true));
+        pieces.add(new Piece(4, 0, "KingBlack", false));
+        pieces.add(new Piece(3, 0, "Latifa", false));
     }
 
     public void paintComponent(Graphics g){
