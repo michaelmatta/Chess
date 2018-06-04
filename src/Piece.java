@@ -55,7 +55,7 @@ public class Piece {
     public void draw(Graphics2D g2) {
         try {
             BufferedImage pic = ImageIO.read(new File("res/" + id + ".png"));
-            g2.drawImage(pic, x, y, 100, 100, null);
+            g2.drawImage(pic, x*Main.GRIDSIZE, y*Main.GRIDSIZE, 100, 100, null);
         } catch (Exception e) {
             e.printStackTrace();
         }
