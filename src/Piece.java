@@ -20,10 +20,12 @@ public class Piece {
 
     public boolean isValidMove() {
         //if(id == "knight"){ move like a knight would}
+        if (id.equals("pawn"))
         return true;
     }
 
     public void draw(Graphics2D g2) {
         //draw image
+
     }
 }
