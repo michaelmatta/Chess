@@ -4,22 +4,46 @@ import java.util.ArrayList;
 public class Piece {
 
     private int x, y;
-    private String id, image;
+    private String id;
     private boolean color;
 
-    public Piece(int x, int y, String id, String image, boolean color) {
+    public Piece(int x, int y, String id, boolean color) {
         this.x = x;
         this.y = y;
         this.id = id;
-        this.image = image;
         this.color = color;
     }
 
-    public void move(int x, int y, ArrayList<Piece> pieces) {
+    public void move(int movetox, int movetoy, ArrayList<Piece> pieces) {
         if (color){ //if white
             for (int i = 0; i < pieces.size(); i++) {
-                if (pieces.get(i).getX() == x && pieces.get(i).getY() == y) {
-
+                if (pieces.get(i).getX() == movetox && pieces.get(i).getY() == movetoy) {
+                    if (!pieces.get(i).isColor()){
+                        pieces.remove(i);
+                        i--;
+                        x = movetox;
+                        y = movetoy;
+                    }
+                }
+                else{
+                    x = movetox;
+                    y = movetoy;
+                }
+            }
+        }
+        if (!color){ //if white
+            for (int i = 0; i < pieces.size(); i++) {
+                if (pieces.get(i).getX() == movetox && pieces.get(i).getY() == movetoy) {
+                    if (pieces.get(i).isColor()){
+                        pieces.remove(i);
+                        i--;
+                        x = movetox;
+                        y = movetoy;
+                    }
+                }
+                else{
+                    x = movetox;
+                    y = movetoy;
                 }
             }
         }
@@ -36,6 +60,10 @@ public class Piece {
 
     public int getY() {
         return y;
+    }
+
+    public boolean isColor() {
+        return color;
     }
 
     public void setX(int x) {
