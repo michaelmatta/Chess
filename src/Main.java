@@ -9,6 +9,7 @@ public class Main extends JPanel {
     public static final int GRIDSIZE = FRAMEWIDTH/8;
 
     private ArrayList<Piece> pieces;
+    private Piece selectedPiece = null;
 
     public Main(){
 
@@ -29,7 +30,25 @@ public class Main extends JPanel {
 
             @Override
             public void mousePressed(MouseEvent e) {
-
+                int x = e.getX() / GRIDSIZE;
+                int y = e.getY() / GRIDSIZE;
+                if(selectedPiece == null) {
+                    for(Piece p: pieces) {
+                        if(p.getX() == x && p.getY() == y) {
+                            selectedPiece = p;
+                            //System.out.println(selectedPiece);
+                        }
+                    }
+                } else {
+                    for(Piece p: pieces) {
+                        if(p.getX()==selectedPiece.getX() && p.getY()==selectedPiece.getY()){
+                            p.move(x, y, pieces);
+                            repaint();
+                        }
+                    }
+                    selectedPiece = null;
+                    //repaint();
+                }
             }
 
             @Override
