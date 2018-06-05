@@ -34,7 +34,7 @@ public class Piece {
                 }
             }
         }
-        if (!color){ //if white
+        if (!color){ //if black
             for (int i = 0; i < pieces.size(); i++) {
                 if (pieces.get(i).getX() == movetox && pieces.get(i).getY() == movetoy) {
                     if (pieces.get(i).isColor()){

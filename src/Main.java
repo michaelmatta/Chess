@@ -40,9 +40,9 @@ public class Main extends JPanel {
                         }
                     }
                 } else {
-                    for(Piece p: pieces) {
-                        if(p.getX()==selectedPiece.getX() && p.getY()==selectedPiece.getY()){
-                            p.move(x, y, pieces);
+                    for (int i = 0; i < pieces.size(); i++) {
+                        if(pieces.get(i).getX()==selectedPiece.getX() && pieces.get(i).getY()==selectedPiece.getY()){
+                            pieces.get(i).move(x, y, pieces);
                             repaint();
                         }
                     }
