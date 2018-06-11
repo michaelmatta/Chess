@@ -111,9 +111,12 @@ public class Main extends JPanel {
                 } else {
                     for (int i = 0; i < pieces.size(); i++) {
                         if(pieces.get(i).getX()==selectedPiece.getX() && pieces.get(i).getY()==selectedPiece.getY()){
+                            Point temp = new Point(pieces.get(i).getX(), pieces.get(i).getY());
                             pieces.get(i).move(x, y, pieces);
-                            repaint();
-                            turn++;
+                            if(temp.getX() != pieces.get(i).getX() || temp.getY() != pieces.get(i).getY()) {
+                                repaint();
+                                turn++;
+                            }
                         }
                     }
                     selectedPiece = null;
