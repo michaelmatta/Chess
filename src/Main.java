@@ -1,7 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
 public class Main extends JPanel {
@@ -10,6 +12,9 @@ public class Main extends JPanel {
 
     private ArrayList<Piece> pieces;
     private Piece selectedPiece = null;
+    private int turn;
+    private boolean gameOn = false;
+    private JMenuBar menuBar;
 
     public Main(){
 
@@ -17,10 +22,70 @@ public class Main extends JPanel {
 
         pieces = new ArrayList<>();
 
-        //initialize pieces
-        init();
+        setLayout(new FlowLayout(0));
+        menuBar = new JMenuBar();
+        JMenu m = new JMenu("MENU");
 
-        //BEGIN GAME!!
+        JMenuItem test = new JMenuItem("restart");
+        test.addActionListener(new Action() {
+            @Override
+            public Object getValue(String key) {
+                return null;
+            }
+
+            @Override
+            public void putValue(String key, Object value) {
+
+            }
+
+            @Override
+            public void setEnabled(boolean b) {
+
+            }
+
+            @Override
+            public boolean isEnabled() {
+                return false;
+            }
+
+            @Override
+            public void addPropertyChangeListener(PropertyChangeListener listener) {
+
+            }
+
+            @Override
+            public void removePropertyChangeListener(PropertyChangeListener listener) {
+
+            }
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                init();
+                turn = 0;
+                repaint();
+            }
+        });
+        m.add(test);
+        menuBar.add(m);
+        menuBar.setAlignmentX(0);
+        add(menuBar);
+
+
+        //setLayout(null);
+
+//        JInternalFrame t = new JInternalFrame("test");
+//        add(t);
+//        t.setVisible(true);
+//        t.setBounds(200, 300, 400, 200);
+
+
+//        JButton test = new JButton("TEST");
+//        add(test);
+        //testing.setBounds(200, 300, 400, 200);
+        //test.setBounds(FRAMEWIDTH/2, FRAMEHEIGHT/2, 50, 50);
+
+
+        init();
 
         addMouseListener(new MouseListener() {
             @Override
@@ -35,8 +100,12 @@ public class Main extends JPanel {
                 if(selectedPiece == null) {
                     for(Piece p: pieces) {
                         if(p.getX() == x && p.getY() == y) {
-                            selectedPiece = p;
-                            //System.out.println(selectedPiece);
+                            if(turn % 2 == 0 && p.isColor()){
+                                selectedPiece = p;
+                            } else if (turn % 2 == 1 && !p.isColor()) {
+                                selectedPiece = p;
+                            }
+
                         }
                     }
                 } else {
@@ -44,6 +113,7 @@ public class Main extends JPanel {
                         if(pieces.get(i).getX()==selectedPiece.getX() && pieces.get(i).getY()==selectedPiece.getY()){
                             pieces.get(i).move(x, y, pieces);
                             repaint();
+                            turn++;
                         }
                     }
                     selectedPiece = null;
@@ -69,6 +139,8 @@ public class Main extends JPanel {
     }
 
     public void init(){
+        pieces = new ArrayList<>();
+        turn = 0;
         for (int i = 0; i < 8; i++) {
             pieces.add(new Piece(i, 6, "PawnWhite", true));
             pieces.add(new Piece(i, 1, "PawnBlack", false));
