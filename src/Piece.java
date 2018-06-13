@@ -31,11 +31,42 @@ public class Piece {
         int ogY = y;
 
         if (id.equals("RookWhite") || id.equals("RookBlack")) { //rook movement
-            if (movetoy == y || movetox == x) {//if moving straight up or down or left or right
+            if (movetoy == y) {//if moving straight up or down or left or right
+
                 x = movetox;
                 y = movetoy;
             }
+            else if (movetox == x){
+                System.out.println("xcoord: " + movetox + " ycoord: " + movetoy);
+                x = movetox;
+                y = movetoy;
+                if (movetoy > ogY) {
+                    System.out.println("what");
+                    for (int i = 0; i < Math.abs(ogX - movetoy); i++) {
+                        for (int j = 0; j < pieces.size(); j++) {
+                            if (pieces.get(j).x == ogX && pieces.get(j).y == ogY + i && !equals(pieces.get(j)) ) {
+                                System.out.println(pieces.get(j).id);
+                                x = ogX;
+                                y = ogY;
+                            }
+                        }
+                    }
+                }
+                if (movetoy < ogY){
+                    for (int i = 0; i < Math.abs(ogX - movetoy); i++) {
+                        for (int j = 0; j < pieces.size(); j++) {
+                            if (pieces.get(j).x == ogX && pieces.get(j).y == ogY - i && !equals(pieces.get(j))) {
+                                System.out.println(pieces.get(j).id);
+                                x = ogX;
+                                y = ogY;
+                            }
+                        }
+                    }
+                }
+
+            }
         }
+
         else if (id.equals("BishopWhite") || id.equals("BishopBlack")) { //bishop movement
             for (int i = -8; i < 8; i++) {
                 if ((movetoy == y+i && movetox == x+i) || (movetoy == y-i && movetox == x+i)) {//if moving diagonal
@@ -186,5 +217,6 @@ public class Piece {
     public String toString() {
         return x + " " + y + " " + id;
     }
+
 
 }
