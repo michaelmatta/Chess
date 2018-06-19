@@ -95,32 +95,38 @@ public class Main extends JPanel {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                int x = e.getX() / GRIDSIZE;
-                int y = e.getY() / GRIDSIZE;
-                if(selectedPiece == null) {
-                    for(Piece p: pieces) {
-                        if(p.getX() == x && p.getY() == y) {
-                            if(turn % 2 == 0 && p.isColor()){
-                                selectedPiece = p;
-                            } else if (turn % 2 == 1 && !p.isColor()) {
-                                selectedPiece = p;
-                            }
+                if(gameOn) {
+                    int x = e.getX() / GRIDSIZE;
+                    int y = e.getY() / GRIDSIZE;
+                    if (selectedPiece == null) {
+                        for (Piece p : pieces) {
+                            if (p.getX() == x && p.getY() == y) {
+                                if (turn % 2 == 0 && p.isColor()) {
+                                    selectedPiece = p;
+                                    //highlighted1 = new Point(p.getX(), p.getY());
+                                } else if (turn % 2 == 1 && !p.isColor()) {
+                                    selectedPiece = p;
+                                    //highlighted1 = new Point(p.getX(), p.getY());
+                                }
 
-                        }
-                    }
-                } else {
-                    for (int i = 0; i < pieces.size(); i++) {
-                        if(pieces.get(i).getX()==selectedPiece.getX() && pieces.get(i).getY()==selectedPiece.getY()){
-                            Point temp = new Point(pieces.get(i).getX(), pieces.get(i).getY());
-                            pieces.get(i).move(x, y, pieces);
-                            if(temp.getX() != pieces.get(i).getX() || temp.getY() != pieces.get(i).getY()) {
-                                repaint();
-                                turn++;
                             }
                         }
+                    } else {
+                        for (int i = 0; i < pieces.size(); i++) {
+                            if (pieces.get(i).getX() == selectedPiece.getX() && pieces.get(i).getY() == selectedPiece.getY()) {
+                                Point temp = new Point(pieces.get(i).getX(), pieces.get(i).getY());
+                                pieces.get(i).move(x, y, pieces);
+                                if (temp.getX() != pieces.get(i).getX() || temp.getY() != pieces.get(i).getY()) {
+                                    repaint();
+                                    turn++;
+                                    checkWin();
+                                    //highlighted2 = new Point(pieces.get(i).getX(), pieces.get(i).getY());
+                                }
+                            }
+                        }
+                        selectedPiece = null;
+                        //repaint();
                     }
-                    selectedPiece = null;
-                    //repaint();
                 }
             }
 
@@ -141,7 +147,33 @@ public class Main extends JPanel {
         });
     }
 
+    public void checkWin() {
+        int blackC = 0;
+        int whiteC = 0;
+        for(Piece p: pieces) {
+            if(p.isColor()) {
+                if(p.getId().equals("KingWhite")) {
+                    whiteC++;
+                }
+            }
+            if(!p.isColor()) {
+                if(p.getId().equals("KingBlack")) {
+                    blackC++;
+                }
+            }
+        }
+
+        if(blackC == 0) {
+            System.out.println("white wins");
+            gameOn = false;
+        } else if (whiteC == 0) {
+            System.out.println("black wins");
+            gameOn = false;
+        }
+    }
+
     public void init(){
+        gameOn = true;
         pieces = new ArrayList<>();
         turn = 0;
         for (int i = 0; i < 8; i++) {
