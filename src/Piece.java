@@ -36,6 +36,7 @@ public class Piece {
             if (movetoy == y) {//if moving straight up or down or left or right
                 x = movetox;
                 y = movetoy;
+                moved = true;
                 if (movetox > ogX) {
                     for (int i = 0; i < Math.abs(ogX - movetox); i++) {
                         for (int j = 0; j < pieces.size(); j++) {
@@ -337,8 +338,8 @@ public class Piece {
                     x = movetox;
                     y = movetoy;
                     for (int i = 0; i < pieces.size(); i++) {
-                        if (pieces.get(i).id.equals("whiteRook")){
-
+                        if (pieces.get(i).id.equals("whiteRook") && !pieces.get(i).moved && pieces.get(i).x == 7){
+                            pieces.get(i).x = 5;
                         }
                         for (int j = 5; j < 7; j++) {
                             if (pieces.get(i).y == 7 && pieces.get(i).x == j && !equals(pieces.get(i))) {
@@ -429,5 +430,7 @@ public class Piece {
         return x + " " + y + " " + id;
     }
 
-
+    public String getId() {
+        return id;
+    }
 }
