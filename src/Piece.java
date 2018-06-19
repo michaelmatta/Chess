@@ -11,7 +11,8 @@ public class Piece {
     private boolean color;
     public static int nextID = 1;
     private int myID;
-    private boolean pawnMoved;
+    private boolean moved;
+    private boolean pawnAttacked;
 
     public Piece(int x, int y, String id, boolean color) {
         this.x = x;
@@ -29,22 +30,42 @@ public class Piece {
     public void move(int movetox, int movetoy, ArrayList<Piece> pieces) {
         int ogX = x;
         int ogY = y;
+        pawnAttacked = true;
 
         if (id.equals("RookWhite") || id.equals("RookBlack")) { //rook movement
             if (movetoy == y) {//if moving straight up or down or left or right
-
                 x = movetox;
                 y = movetoy;
+                if (movetox > ogX) {
+                    for (int i = 0; i < Math.abs(ogX - movetox); i++) {
+                        for (int j = 0; j < pieces.size(); j++) {
+                            if (pieces.get(j).y == ogY && pieces.get(j).x == ogX + i && !equals(pieces.get(j))) {
+                                System.out.println(pieces.get(j).id);
+                                x = ogX;
+                                y = ogY;
+                            }
+                        }
+                    }
+                }
+                if (movetox < ogX){
+                    for (int i = 0; i < Math.abs(ogX - movetox); i++) {
+                        for (int j = 0; j < pieces.size(); j++) {
+                            if (pieces.get(j).y == ogY && pieces.get(j).x == ogX - i && !equals(pieces.get(j))) {
+                                System.out.println(pieces.get(j).id);
+                                x = ogX;
+                                y = ogY;
+                            }
+                        }
+                    }
+                }
             }
             else if (movetox == x){
-                System.out.println("xcoord: " + movetox + " ycoord: " + movetoy);
                 x = movetox;
                 y = movetoy;
                 if (movetoy > ogY) {
-                    System.out.println("what");
-                    for (int i = 0; i < Math.abs(ogX - movetoy); i++) {
+                    for (int i = 0; i < Math.abs(ogY - movetoy); i++) {
                         for (int j = 0; j < pieces.size(); j++) {
-                            if (pieces.get(j).x == ogX && pieces.get(j).y == ogY + i && !equals(pieces.get(j)) ) {
+                            if (pieces.get(j).x == ogX && pieces.get(j).y == ogY + i && !equals(pieces.get(j))) {
                                 System.out.println(pieces.get(j).id);
                                 x = ogX;
                                 y = ogY;
@@ -53,7 +74,7 @@ public class Piece {
                     }
                 }
                 if (movetoy < ogY){
-                    for (int i = 0; i < Math.abs(ogX - movetoy); i++) {
+                    for (int i = 0; i < Math.abs(ogY - movetoy); i++) {
                         for (int j = 0; j < pieces.size(); j++) {
                             if (pieces.get(j).x == ogX && pieces.get(j).y == ogY - i && !equals(pieces.get(j))) {
                                 System.out.println(pieces.get(j).id);
@@ -63,15 +84,62 @@ public class Piece {
                         }
                     }
                 }
-
             }
         }
 
         else if (id.equals("BishopWhite") || id.equals("BishopBlack")) { //bishop movement
-            for (int i = -8; i < 8; i++) {
-                if ((movetoy == y+i && movetox == x+i) || (movetoy == y-i && movetox == x+i)) {//if moving diagonal
+            for (int h = -8; h < 8; h++) {
+                if ((movetoy == y+h && movetox == x+h) || (movetoy == y-h && movetox == x+h)) {//if moving diagonal
                     x = movetox;
                     y = movetoy;
+                    if (movetoy > ogY) {//going down blocking
+                        if (movetox > ogX) {//going right
+                            for (int i = 0; i < Math.abs(ogY - movetoy); i++) {
+                                for (int j = 0; j < pieces.size(); j++) {
+                                    if (pieces.get(j).x == ogX + i && pieces.get(j).y == ogY + i && !equals(pieces.get(j))) {
+                                        System.out.println(pieces.get(j).id);
+                                        x = ogX;
+                                        y = ogY;
+                                    }
+                                }
+                            }
+                        }
+                        if (movetox < ogX){//going left
+                            for (int i = 0; i < Math.abs(ogY - movetoy); i++) {
+                                for (int j = 0; j < pieces.size(); j++) {
+                                    if (pieces.get(j).x == ogX - i && pieces.get(j).y == ogY + i && !equals(pieces.get(j))) {
+                                        System.out.println(pieces.get(j).id);
+                                        x = ogX;
+                                        y = ogY;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (movetoy < ogY) {//going down blocking
+                        if (movetox > ogX) {//going right
+                            for (int i = 0; i < Math.abs(ogY - movetoy); i++) {
+                                for (int j = 0; j < pieces.size(); j++) {
+                                    if (pieces.get(j).x == ogX + i && pieces.get(j).y == ogY - i && !equals(pieces.get(j))) {
+                                        System.out.println(pieces.get(j).id);
+                                        x = ogX;
+                                        y = ogY;
+                                    }
+                                }
+                            }
+                        }
+                        if (movetox < ogX){//going left
+                            for (int i = 0; i < Math.abs(ogY - movetoy); i++) {
+                                for (int j = 0; j < pieces.size(); j++) {
+                                    if (pieces.get(j).x == ogX - i && pieces.get(j).y == ogY - i && !equals(pieces.get(j))) {
+                                        System.out.println(pieces.get(j).id);
+                                        x = ogX;
+                                        y = ogY;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -86,10 +154,19 @@ public class Piece {
             }
         }
         else if (id.equals("PawnWhite")){ //pawn white movement
-            if ((movetox == x && movetoy == y-1) ||(movetox == x && movetoy == y-2 && !pawnMoved)){
+            if ((movetox == x && movetoy == y-1) ||(movetox == x && movetoy == y-2 && !moved)){
                 x = movetox;
                 y = movetoy;
-                pawnMoved = true;
+                if (!moved) { //stops pawns from hopping 2 over pieces
+                    moved = true;
+                    for (int i = 0; i < pieces.size(); i++) {
+                        if (pieces.get(i).y == movetoy + 1 && pieces.get(i).x == ogX && !equals(pieces.get(i))) {
+                            x = ogX;
+                            y = ogY;
+                            moved = false;
+                        }
+                    }
+                }
             }
             else if ((movetox == x+1 && movetoy == y-1)||(movetox == x-1 && movetoy == y-1)){
                 for (int i = 0; i < pieces.size(); i++) { //Attacking black
@@ -97,6 +174,7 @@ public class Piece {
                         if (pieces.get(i).x == movetox && pieces.get(i).y == movetoy && !pieces.get(i).color) {
                             x = movetox;
                             y = movetoy;
+                            pawnAttacked = false;
                         }
                     }
                 }
@@ -106,62 +184,190 @@ public class Piece {
             }
         }
         else if (id.equals("PawnBlack")){ //pawn black movement
-            if ((movetox == x && movetoy == y+1) ||(movetox == x && movetoy == y+2 && !pawnMoved)){
+            if ((movetox == x && movetoy == y+1) ||(movetox == x && movetoy == y+2 && !moved)){
                 x = movetox;
                 y = movetoy;
-                pawnMoved = true;
+                if (!moved) { //stops pawns from hopping 2 over pieces
+                    moved = true;
+                    for (int i = 0; i < pieces.size(); i++) {
+                        if (pieces.get(i).y == movetoy - 1 && pieces.get(i).x == ogX && !equals(pieces.get(i))) {
+                            x = ogX;
+                            y = ogY;
+                            moved = false;
+
+                        }
+                    }
+                }
             }
-            else if ((movetox == x+1 && movetoy == y+1)||(movetox == x-1 && movetoy == y+1)){
+            else if ((movetox == x+1 && movetoy == y+1)||(movetox == x-1 && movetoy == y+1)) {
                 for (int i = 0; i < pieces.size(); i++) { //Attacking white
                     if (!equals(pieces.get(i))) {
                         if (pieces.get(i).x == movetox && pieces.get(i).y == movetoy && pieces.get(i).color) {
                             x = movetox;
                             y = movetoy;
+                            pawnAttacked = false;
                         }
                     }
                 }
             }
-            if (y == 7){
+            if (y == 7){ //turns into queen (need to change later because back rank pawns can attack straight
                 id = "Latifa";
             }
         }
         else if (id.equals("QueenWhite") || id.equals("Latifa")){ //queen movement
-            if (movetoy == y || movetox == x) {//if moving straight up or down or left or right
+            if (movetoy == y) {//if moving straight up or down or left or right
                 x = movetox;
                 y = movetoy;
-            }
-            for (int i = -8; i < 8; i++) {
-                if ((movetoy == y+i && movetox == x+i) || (movetoy == y-i && movetox == x+i)) {//if moving diagonal
-                    x = movetox;
-                    y = movetoy;
-                }
-            }
-        }
-        else if (id.equals("KingWhite") || id.equals("KingBlack")){ //king movement
-            for (int i = -1; i < 2; i++) {
-                for (int j = -1; j < 2; j++) {
-                    if ((movetoy == y+i && movetox == x+j)){
-                        x = movetox;
-                        y = movetoy;
+                if (movetox > ogX) {
+                    for (int i = 0; i < Math.abs(ogX - movetox); i++) {
+                        for (int j = 0; j < pieces.size(); j++) {
+                            if (pieces.get(j).y == ogY && pieces.get(j).x == ogX + i && !equals(pieces.get(j))) {
+                                System.out.println(pieces.get(j).id);
+                                x = ogX;
+                                y = ogY;
+                            }
+                        }
                     }
                 }
-
+                if (movetox < ogX){
+                    for (int i = 0; i < Math.abs(ogX - movetox); i++) {
+                        for (int j = 0; j < pieces.size(); j++) {
+                            if (pieces.get(j).y == ogY && pieces.get(j).x == ogX - i && !equals(pieces.get(j))) {
+                                System.out.println(pieces.get(j).id);
+                                x = ogX;
+                                y = ogY;
+                            }
+                        }
+                    }
+                }
+            }
+            else if (movetox == x){
+                x = movetox;
+                y = movetoy;
+                if (movetoy > ogY) {
+                    for (int i = 0; i < Math.abs(ogY - movetoy); i++) {
+                        for (int j = 0; j < pieces.size(); j++) {
+                            if (pieces.get(j).x == ogX && pieces.get(j).y == ogY + i && !equals(pieces.get(j))) {
+                                System.out.println(pieces.get(j).id);
+                                x = ogX;
+                                y = ogY;
+                            }
+                        }
+                    }
+                }
+                if (movetoy < ogY){
+                    for (int i = 0; i < Math.abs(ogY - movetoy); i++) {
+                        for (int j = 0; j < pieces.size(); j++) {
+                            if (pieces.get(j).x == ogX && pieces.get(j).y == ogY - i && !equals(pieces.get(j))) {
+                                System.out.println(pieces.get(j).id);
+                                x = ogX;
+                                y = ogY;
+                            }
+                        }
+                    }
+                }
+            }
+            for (int h = -8; h < 8; h++) {
+                if ((movetoy == y+h && movetox == x+h) || (movetoy == y-h && movetox == x+h)) {//if moving diagonal
+                    x = movetox;
+                    y = movetoy;
+                    if (movetoy > ogY) {//going down blocking
+                        if (movetox > ogX) {//going right
+                            for (int i = 0; i < Math.abs(ogY - movetoy); i++) {
+                                for (int j = 0; j < pieces.size(); j++) {
+                                    if (pieces.get(j).x == ogX + i && pieces.get(j).y == ogY + i && !equals(pieces.get(j))) {
+                                        System.out.println(pieces.get(j).id);
+                                        x = ogX;
+                                        y = ogY;
+                                    }
+                                }
+                            }
+                        }
+                        if (movetox < ogX){//going left
+                            for (int i = 0; i < Math.abs(ogY - movetoy); i++) {
+                                for (int j = 0; j < pieces.size(); j++) {
+                                    if (pieces.get(j).x == ogX - i && pieces.get(j).y == ogY + i && !equals(pieces.get(j))) {
+                                        System.out.println(pieces.get(j).id);
+                                        x = ogX;
+                                        y = ogY;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (movetoy < ogY) {//going down blocking
+                        if (movetox > ogX) {//going right
+                            for (int i = 0; i < Math.abs(ogY - movetoy); i++) {
+                                for (int j = 0; j < pieces.size(); j++) {
+                                    if (pieces.get(j).x == ogX + i && pieces.get(j).y == ogY - i && !equals(pieces.get(j))) {
+                                        System.out.println(pieces.get(j).id);
+                                        x = ogX;
+                                        y = ogY;
+                                    }
+                                }
+                            }
+                        }
+                        if (movetox < ogX){//going left
+                            for (int i = 0; i < Math.abs(ogY - movetoy); i++) {
+                                for (int j = 0; j < pieces.size(); j++) {
+                                    if (pieces.get(j).x == ogX - i && pieces.get(j).y == ogY - i && !equals(pieces.get(j))) {
+                                        System.out.println(pieces.get(j).id);
+                                        x = ogX;
+                                        y = ogY;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
-        else{
-            x = movetox;
-            y = movetoy;
+        else if (id.equals("KingWhite") || id.equals("KingBlack")) { //king movement
+            for (int i = -1; i < 2; i++) {
+                for (int j = -1; j < 2; j++) {
+                    if ((movetoy == y + i && movetox == x + j)) {
+                        x = movetox;
+                        y = movetoy;
+                        moved = true;
+                    }
+                }
+            }
+            if (color) {//if white and a king
+                if (movetoy == ogY && movetox == ogX + 2 && !moved) { //castling king side
+                    x = movetox;
+                    y = movetoy;
+                    for (int i = 0; i < pieces.size(); i++) {
+                        if (pieces.get(i).id.equals("whiteRook")){
+
+                        }
+                        for (int j = 5; j < 7; j++) {
+                            if (pieces.get(i).y == 7 && pieces.get(i).x == j && !equals(pieces.get(i))) {
+                                System.out.println(pieces.get(i).id);
+                                x = ogX;
+                                y = ogY;
+                            }
+                        }
+                    }
+                } else if (movetoy == ogY && movetox == ogX - 2 && !moved) {
+
+                }
+            }
         }
         if (color){ //if white
             for (int i = 0; i < pieces.size(); i++) { //Attacking black
-                if (!equals(pieces.get(i))){//moves back if white in that square (may take a turn later watch out)
+                if (!equals(pieces.get(i))){//moves back if white in that square
                     if (pieces.get(i).getX() == movetox && pieces.get(i).getY() == movetoy && pieces.get(i).isColor()) {
                         x = ogX;
                         y = ogY;
                         break;
                     }
+                    else if (pawnAttacked && pieces.get(i).getX() == movetox && pieces.get(i).getY() == movetoy && id.equals("PawnWhite")){
+                        x = ogX; //makes sure pawns cant attack straight
+                        y = ogY;
+                        break;
+                    }
                 }
-                if (pieces.get(i).getX() == x && pieces.get(i).getY() == y && !pieces.get(i).isColor()) {
+                if (pieces.get(i).getX() == x && pieces.get(i).getY() == y && !pieces.get(i).isColor()) { //kills pieces
                     pieces.remove(i);
                     i--;
                 }
@@ -175,8 +381,13 @@ public class Piece {
                         y = ogY;
                         break;
                     }
+                    else if (pawnAttacked && pieces.get(i).getX() == movetox && pieces.get(i).getY() == movetoy && id.equals("PawnBlack")){
+                        x = ogX; //makes sure pawns cant attack straight
+                        y = ogY;
+                        break;
+                    }
                 }
-                if (pieces.get(i).getX() == x && pieces.get(i).getY() == y && pieces.get(i).isColor()) {
+                if (pieces.get(i).getX() == x && pieces.get(i).getY() == y && pieces.get(i).isColor() && pawnAttacked) { //kills pieces
                     pieces.remove(i);
                     i--;
                 }
